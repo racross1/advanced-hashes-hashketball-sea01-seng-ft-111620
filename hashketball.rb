@@ -135,6 +135,7 @@ def num_points_scored(name)
 data = game_hash
 points_scored = 0 
 data.each do |team_key, value|
+  binding.pry
   data[team_key].each do |team_attributes, value|
     data[team_key][:players].each do |hash|
       if hash[:player_name] == name
@@ -232,3 +233,98 @@ def big_shoe_rebounds
 biggest_shoe_rebounds
 end 
 
+def most_points_scored 
+  data = game_hash
+  highest_score = 0 
+  highest_scorer =""
+  data.each do |team_key, value|
+    data[team_key].each do |team_attributes, value|
+      data[team_key][:players].each do |hash|
+        if hash[:points] > highest_score
+          #binding.pry
+          highest_score = hash[:points]
+          highest_scorer = hash[:name]
+        end 
+      end 
+    end
+  end 
+p "the highest score is #{highest_score}"
+end 
+  
+
+def winning_team
+  data = game_hash
+  home_pts = home_team_pts 
+  away_pts = away_team_pts 
+  if home_pts > away_pts 
+    p "Home team wins with #{home_pts} points!"
+  elsif
+    away_pts > home_pts 
+    p "Away team wins with #{away_pts} points!"
+  else 
+    p "Overtime!"
+  end 
+end 
+
+
+
+def home_team_pts
+  data = game_hash
+  home_pts_array = []
+  home_pts = 0 
+  data[:home][:players].each do |hash|
+    home_pts_array << hash[:points]
+  end 
+  home_pts = home_pts_array.reduce(0) { |sum, num| sum + num }
+  home_pts
+end   
+
+def away_team_pts
+  data = game_hash
+  away_pts_array = []
+  away_pts = 0 
+  data[:away][:players].each do |hash|
+    away_pts_array << hash[:points]
+  end 
+  away_pts = away_pts_array.reduce(0) { |sum, num| sum + num }
+  p away_pts
+end   
+
+def player_with_longest_name 
+  data = game_hash
+  longest_playername = "q"
+  longest_playername_length = 0 
+  data.each do |team_key, value|
+    data[team_key][:players].each do |hash|
+    if hash[:player_name].length > longest_playername.length
+      longest_playername = hash[:player_name]
+      longest_playername_length = hash[:player_name].length
+    end 
+  end 
+end 
+  p longest_playername
+end 
+
+def long_name_steals_a_ton
+  data = game_hash
+  most_steals = 0 
+  biggest_stealer =""
+  mr_longname = player_with_longest_name
+  data.each do |team_key, value|
+    data[team_key].each do |team_attributes, value|
+      data[team_key][:players].each do |hash|
+        if hash[:steals] > most_steals
+          most_steals = hash[:steals]
+          biggest_stealer = hash[:player_name]
+        end 
+      end 
+    end 
+  end 
+  if biggest_stealer == mr_longname
+    p "True! Mr. Longname is the biggest stealer!"
+  else 
+    p "False! Mr. Longname is not the biggest stealder (it's #{biggest_stealer})"
+  end 
+end 
+
+long_name_steals_a_ton
